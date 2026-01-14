@@ -1,0 +1,13 @@
+{
+  "name": "aleen-clothing",
+  "version": "1.0.0",
+  "description": "E-commerce management system for Aleen Clothing",
+  "scripts": {
+    "install-all": "cd backend && npm install && cd ../frontend && npm install",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
+    "seed": "cd backend && node seed.js"
+  },
+  "keywords": ["ecommerce", "pos", "inventory", "react", "nodejs"],
+  "author": "Aleen Clothing",
+  "license": "MIT"
+}
