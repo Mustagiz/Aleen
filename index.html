@@ -8,31 +8,52 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #8B0000 0%, #D4AF37 100%);
+            background: linear-gradient(135deg, #8B0000 0%, #660000 50%, #8B0000 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
+        }
+        .lang-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #D4AF37;
+            color: #8B0000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
         }
         .container {
             background: white;
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            max-width: 400px;
-            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            max-width: 450px;
+            width: 100%;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
         }
         h1 {
             color: #8B0000;
-            text-align: center;
-            margin-bottom: 10px;
-            font-size: 32px;
+            font-size: 36px;
+            margin-bottom: 8px;
         }
         .tagline {
-            text-align: center;
             color: #D4AF37;
-            margin-bottom: 30px;
+            font-size: 18px;
             font-style: italic;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 24px;
         }
         .form-group {
             margin-bottom: 20px;
@@ -42,6 +63,9 @@
             color: #333;
             margin-bottom: 8px;
             font-weight: 500;
+        }
+        .input-wrapper {
+            position: relative;
         }
         input {
             width: 100%;
@@ -55,7 +79,17 @@
             outline: none;
             border-color: #8B0000;
         }
-        button {
+        .eye-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+        }
+        button[type="submit"] {
             width: 100%;
             padding: 14px;
             background: #8B0000;
@@ -67,16 +101,18 @@
             cursor: pointer;
             transition: background 0.3s;
         }
-        button:hover {
+        button[type="submit"]:hover {
             background: #660000;
         }
         .error {
-            color: red;
-            text-align: center;
-            margin-top: 10px;
+            background: #fee;
+            color: #c00;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
             display: none;
         }
-        .footer {
+        .demo {
             text-align: center;
             margin-top: 20px;
             color: #666;
@@ -85,30 +121,85 @@
     </style>
 </head>
 <body>
+    <button class="lang-btn" onclick="toggleLang()" id="langBtn">हिंदी</button>
+    
     <div class="container">
-        <h1>Aleen Clothing</h1>
-        <p class="tagline">Empowering Indian Women</p>
+        <div class="header">
+            <h1 id="title">Aleen Clothing</h1>
+            <p class="tagline" id="subtitle">Empowering Indian Women</p>
+        </div>
+        
+        <h2 id="loginTitle">Admin Login</h2>
+        
+        <div class="error" id="error">Invalid credentials</div>
         
         <form id="loginForm">
             <div class="form-group">
-                <label>Email</label>
+                <label id="emailLabel">Email</label>
                 <input type="email" id="email" value="admin@aleen.com" required>
             </div>
             
             <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="password" value="admin123" required>
+                <label id="passwordLabel">Password</label>
+                <div class="input-wrapper">
+                    <input type="password" id="password" value="admin123" required>
+                    <button type="button" class="eye-btn" onclick="togglePassword()" id="eyeBtn">👁️</button>
+                </div>
             </div>
             
-            <button type="submit">Login</button>
-            <p class="error" id="error">Invalid credentials</p>
+            <button type="submit" id="submitBtn">Login</button>
         </form>
         
-        <p class="footer">© 2024 Aleen Clothing. All rights reserved.</p>
+        <p class="demo">Demo: admin@aleen.com / admin123</p>
     </div>
 
     <script>
-        const API_URL = 'https://aleen-backend.onrender.com/api';
+        const API_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:5001/api'
+            : 'https://aleen-backend.onrender.com/api';
+        
+        let lang = 'en';
+        let showPassword = false;
+        
+        const text = {
+            en: {
+                title: 'Aleen Clothing',
+                subtitle: 'Empowering Indian Women',
+                login: 'Admin Login',
+                email: 'Email',
+                password: 'Password',
+                submit: 'Login',
+                error: 'Invalid credentials'
+            },
+            hi: {
+                title: 'अलीन क्लोथिंग',
+                subtitle: 'भारतीय महिलाओं को सशक्त बनाना',
+                login: 'व्यवस्थापक लॉगिन',
+                email: 'ईमेल',
+                password: 'पासवर्ड',
+                submit: 'लॉगिन करें',
+                error: 'अमान्य प्रमाण पत्र'
+            }
+        };
+        
+        function toggleLang() {
+            lang = lang === 'en' ? 'hi' : 'en';
+            document.getElementById('langBtn').textContent = lang === 'en' ? 'हिंदी' : 'English';
+            document.getElementById('title').textContent = text[lang].title;
+            document.getElementById('subtitle').textContent = text[lang].subtitle;
+            document.getElementById('loginTitle').textContent = text[lang].login;
+            document.getElementById('emailLabel').textContent = text[lang].email;
+            document.getElementById('passwordLabel').textContent = text[lang].password;
+            document.getElementById('submitBtn').textContent = text[lang].submit;
+            document.getElementById('error').textContent = text[lang].error;
+        }
+        
+        function togglePassword() {
+            showPassword = !showPassword;
+            const input = document.getElementById('password');
+            input.type = showPassword ? 'text' : 'password';
+            document.getElementById('eyeBtn').textContent = showPassword ? '🙈' : '👁️';
+        }
         
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -127,12 +218,15 @@
                 if (response.ok) {
                     const data = await response.json();
                     localStorage.setItem('token', data.token);
-                    window.location.href = '/frontend/';
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    window.location.href = '/dashboard';
                 } else {
                     errorEl.style.display = 'block';
+                    setTimeout(() => errorEl.style.display = 'none', 3000);
                 }
             } catch (error) {
                 errorEl.style.display = 'block';
+                setTimeout(() => errorEl.style.display = 'none', 3000);
             }
         });
     </script>
